@@ -14,13 +14,6 @@
         { id: 'contactame',  label: 'Contáctame' },
     ];
 
-    const DEFAULT_REVIEWS = [
-        { user: 'Anonymous777', time: '1 hour ago', path: 'Home > Cobol', comment: 'Que bacano foro, me parece interesante.' },
-        { user: 'DevMaster', time: '3 hours ago', path: 'Home > Python', comment: 'Muy útiles los scripts, me salvaron en la uni.' },
-        { user: 'RetroFan99', time: '1 day ago', path: 'Home > AS400', comment: 'Increíble el detalle de la terminal.' },
-    ];
-
-    let REVIEWS = JSON.parse(localStorage.getItem('portfolio_reviews')) || [...DEFAULT_REVIEWS];
     const DEFAULT_SECTION = 'home';
 
     // ============================================================
@@ -60,25 +53,46 @@
         return SECTIONS.some(function (s) { return s.id === id; });
     }
 
-    function renderReviews() {
-        if (REVIEWS.length === 0) {
-            els.reviews.innerHTML = '<p class="text-xs text-zinc-600">No reviews yet.</p>';
-            return;
+    // ============================================================
+    // CARGAR RESEÑAS DESDE NEON (Vercel API)
+    // ============================================================
+    async function renderReviews() {
+        // Mostrar estado de carga
+        els.reviews.innerHTML = '<p class="text-xs text-zinc-600 animate-pulse">Cargando reseñas...</p>';
+
+        try {
+            const res = await fetch('/api/getReviews');
+            if (!res.ok) throw new Error('Error al obtener reseñas');
+            
+            const reviews = await res.json();
+            
+            if (!reviews || reviews.length === 0) {
+                els.reviews.innerHTML = '<p class="text-xs text-zinc-600">No hay reseñas aún. ¡Sé el primero!</p>';
+                return;
+            }
+
+            // Mapear los datos de la BD (user_name, comment, created_at)
+            els.reviews.innerHTML = reviews.map(r => `
+                <article class="rounded-lg border border-zinc-800/50 bg-zinc-900/20 p-3 space-y-2 fade-in">
+                    <header class="flex items-center gap-2">
+                        <div class="min-w-0">
+                            <p class="text-sm text-zinc-300 truncate">${escapeHtml(r.user_name)}</p>
+                            <p class="text-[11px] text-zinc-600">${new Date(r.created_at).toLocaleString()}</p>
+                        </div>
+                    </header>
+                    <p class="text-[10px] text-zinc-500 uppercase tracking-wide">Web > Opinión</p>
+                    <p class="text-xs text-zinc-400 leading-relaxed">${escapeHtml(r.comment)}</p>
+                </article>
+            `).join('');
+        } catch (error) {
+            console.error("Error cargando reseñas:", error);
+            els.reviews.innerHTML = '<p class="text-xs text-red-500">Error de conexión con la base de datos.</p>';
         }
-        els.reviews.innerHTML = REVIEWS.map(r => `
-            <article class="rounded-lg border border-zinc-800/50 bg-zinc-900/20 p-3 space-y-2 fade-in">
-                <header class="flex items-center gap-2">
-                    <img src="img/perfil1.jpg" alt="" class="w-7 h-7 rounded-full bg-zinc-800 object-cover" onerror="this.style.display='none'">
-                    <div class="min-w-0">
-                        <p class="text-sm text-zinc-300 truncate">${escapeHtml(r.user)}</p>
-                        <p class="text-[11px] text-zinc-600">${escapeHtml(r.time)}</p>
-                    </div>
-                </header>
-                <p class="text-[10px] text-zinc-500 uppercase tracking-wide">${escapeHtml(r.path)}</p>
-                <p class="text-xs text-zinc-400 leading-relaxed">${escapeHtml(r.comment)}</p>
-            </article>`).join('');
     }
 
+    // ============================================================
+    // SECCIONES Y TERMINAL
+    // ============================================================
     function renderSection(id) {
         const tpl = document.getElementById('tpl-' + id);
         if (!tpl) {
@@ -152,6 +166,9 @@
         });
     }
 
+    // ============================================================
+    // PANEL DE RESEÑAS Y ENVÍO A NEON
+    // ============================================================
     function initReviewsPanel() {
         let isExpanded = false;
         els.btnToggle.addEventListener('click', () => {
@@ -170,18 +187,42 @@
             }
         });
 
-        els.form.addEventListener('submit', (e) => {
+        els.form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
             const newReview = {
-                user: els.inputName.value.trim(),
-                time: 'Just now',
-                path: 'Web > Opinión',
+                user_name: els.inputName.value.trim(),
                 comment: els.inputText.value.trim()
             };
-            REVIEWS.unshift(newReview);
-            localStorage.setItem('portfolio_reviews', JSON.stringify(REVIEWS));
-            renderReviews();
-            els.form.reset();
+
+            // Efecto de carga en el botón
+            const submitBtn = els.form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/postReview', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newReview)
+                });
+
+                if (res.ok) {
+                    await renderReviews(); // Recargar la lista desde la BD
+                    els.form.reset();      // Limpiar el formulario
+                } else {
+                    const errorData = await res.json();
+                    alert(`Error: ${errorData.error || 'No se pudo guardar la reseña'}`);
+                }
+            } catch (error) {
+                console.error("Error al enviar:", error);
+                alert("No se pudo conectar con el servidor. Revisa tu conexión.");
+            } finally {
+                // Restaurar el botón
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         });
     }
 
@@ -240,7 +281,7 @@
             });
         });
 
-        // --- LÓGICA DEL MODO VIDEO CORREGIDA ---
+        // Modo Video
         function setVideoMode(activate) {
             if (activate) {
                 document.body.classList.add('video-only');
@@ -250,7 +291,7 @@
                 els.btnExitVideo.classList.remove('hidden');
                 els.settingsPanel.classList.add('hidden'); // Ocultar ajustes
             } else {
-                document.body.classList.remove('video-only'); // <- AQUI ESTABA EL BUG, AHORA SE ELIMINA BIEN
+                document.body.classList.remove('video-only');
                 els.btnVideoMode.textContent = 'OFF';
                 els.btnVideoMode.classList.remove('bg-brand', 'text-zinc-950');
                 els.btnVideoMode.classList.add('bg-zinc-800', 'text-zinc-300');
@@ -304,7 +345,7 @@
 
     function init() {
         initVideo();
-        renderReviews();
+        renderReviews(); // Carga inicial de reseñas desde Vercel/Neon
         initSettings();
         initReviewsPanel();
         
