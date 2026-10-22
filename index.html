@@ -102,7 +102,7 @@
     <!-- VIDEO Y AUDIO DE FONDO -->
     <div class="fixed inset-0 w-full h-full -z-20 overflow-hidden pointer-events-none">
         <video id="bg-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline preload="auto" class="w-full h-full object-cover pixel-video opacity-60">
-            <source src="videos/videoplayback.mp4" type="video/mp4">
+            <source src="videos/speedrun_tetris.mp4" type="video/mp4">
         </video>
         <!-- Se añadió el id="video-overlay" -->
         <div id="video-overlay" class="absolute inset-0"></div>
@@ -123,16 +123,32 @@
     <!-- HEADER -->
     <header class="sticky top-0 z-40 w-full border-b border-zinc-800/50 bg-zinc-950/60 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-1.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
-                    </svg>
-                </div>
-                <h1 class="text-xl font-bold tracking-tight text-white">
-                    Sebastián Pérez<span class="text-brand">_</span>
-                </h1>
-            </div>
+           <div class="flex items-center gap-3">
+    <!-- Icono (se mantiene igual) -->
+    <div class="p-1.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+    </div>
+
+    <!-- Nombre y Subtítulo -->
+    <div class="flex flex-col justify-center">
+        <h1 class="text-xl font-bold tracking-tight text-white leading-none">
+            Sebastián Pérez<span class="text-brand"></span>
+        </h1>
+        <p class="text-[11px] sm:text-xs text-zinc-400 tracking-wide mt-1 font-mono flex flex-wrap items-center gap-1.5">
+            <span>Software Developer</span>
+            <span class="text-zinc-600">|</span>
+            <span>IBM i (AS/400)</span>
+            <span class="text-brand/60">|</span>
+            <span>COBOL</span>
+            <span class="text-brand/60">|</span>
+            <span>SQL</span>
+        </p>
+    </div>
+</div>
+
+            
 
             <div class="flex items-center gap-2 sm:gap-3">
                 <button id="btn-settings" class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-zinc-700 hover:border-zinc-500 text-zinc-400 hover:text-white transition-colors text-sm">
