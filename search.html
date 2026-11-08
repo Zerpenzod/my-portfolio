@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de búsqueda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #fff; color: #202124; }
+        .result-link { color: #1a0dab; }
+        .result-link:hover { text-decoration: underline; }
+        .result-url { color: #006621; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header de Búsqueda (Estilo DuckDuckGo) -->
+    <header class="border-b border-gray-200 py-4 px-6 flex items-center gap-6 sticky top-0 bg-white z-10">
+        <a href="index.html" class="text-2xl font-bold tracking-tighter text-gray-800 hover:text-black">
+            Portfolio<span class="text-blue-600">Search</span>
+        </a>
+
+        <form action="search.html" method="GET" class="flex-1 max-w-2xl flex items-center bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-md transition-shadow px-4 py-2">
+            <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" name="q" id="search-query" placeholder="Buscar..." class="w-full outline-none text-gray-800 bg-transparent" autocomplete="off">
+            <button type="submit" class="hidden">Buscar</button>
+        </form>
+    </header>
+
+    <!-- Contenido de Resultados -->
+    <main class="flex-1 max-w-3xl px-6 py-6 ml-0 md:ml-40">
+        
+        <!-- Tabs de Navegación -->
+        <div class="flex gap-6 text-sm text-gray-500 mb-6 border-b border-gray-100 pb-2">
+            <span class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-2">Todo</span>
+            <a href="#" class="hover:text-gray-800">Imágenes</a>
+            <a href="#" class="hover:text-gray-800">Videos</a>
+            <a href="#" class="hover:text-gray-800">Noticias</a>
+        </div>
+
+        <!-- Estadísticas falsas de búsqueda -->
+        <p class="text-xs text-gray-500 mb-6">Aproximadamente 1.230.000 resultados (0,42 segundos)</p>
+
+        <!-- Lista de Resultados Ficticios -->
+        <div class="space-y-8">
+            
+            <!-- Resultado 1 -->
+            <article>
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-xs text-blue-600 font-bold">L</div>
+                    <div>
+                        <p class="text-sm text-gray-800">Wikipedia</p>
+                        <p class="text-xs result-url">https://es.wikipedia.org › wiki › Linux</p>
+                    </div>
+                </div>
+                <a href="#" class="text-xl result-link font-medium">Linux - Wikipedia, la enciclopedia libre</a>
+                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                    Linux es un núcleo de sistema operativo libre tipo Unix multiplataforma, basado en el estándar POSIX y en el software GNU. Fue creado por Linus Torvalds en 1991.
+                </p>
+            </article>
+
+            <!-- Resultado 2 -->
+            <article>
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center text-xs text-red-600 font-bold">R</div>
+                    <div>
+                        <p class="text-sm text-gray-800">Red Hat</p>
+                        <p class="text-xs result-url">https://www.redhat.com › es › topics › linux</p>
+                    </div>
+                </div>
+                <a href="#" class="text-xl result-link font-medium">¿Qué es Linux? - Red Hat</a>
+                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                    Linux es un sistema operativo de código abierto. Se trata de un sistema operativo que se puede ejecutar en servidores, ordenadores de escritorio, dispositivos móviles, etc.
+                </p>
+            </article>
+
+            <!-- Resultado 3 -->
+            <article>
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-600 font-bold">L</div>
+                    <div>
+                        <p class="text-sm text-gray-800">Linux.org</p>
+                        <p class="text-xs result-url">https://www.linux.org</p>
+                    </div>
+                </div>
+                <a href="#" class="text-xl result-link font-medium">Linux.org - The Linux Home Page</a>
+                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                    The primary purpose of Linux.org is to provide an easy to use, friendly, and informative website for Linux users and enthusiasts to learn about Linux.
+                </p>
+            </article>
+
+            <!-- Resultado 4 -->
+            <article>
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-xs text-green-600 font-bold">U</div>
+                    <div>
+                        <p class="text-sm text-gray-800">Ubuntu</p>
+                        <p class="text-xs result-url">https://ubuntu.com › download › desktop</p>
+                    </div>
+                </div>
+                <a href="#" class="text-xl result-link font-medium">Descargar Ubuntu | Ubuntu</a>
+                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                    Ubuntu es el sistema operativo Linux más popular del mundo. Únete a la comunidad y descarga la versión más reciente para tu escritorio o servidor.
+                </p>
+            </article>
+
+            <!-- Resultado 5 -->
+            <article>
+                <div class="flex items-center gap-2 mb-1">
+                    <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-xs text-purple-600 font-bold">G</div>
+                    <div>
+                        <p class="text-sm text-gray-800">GitHub</p>
+                        <p class="text-xs result-url">https://github.com › torvalds › linux</p>
+                    </div>
+                </div>
+                <a href="#" class="text-xl result-link font-medium">torvalds/linux: Linux kernel source tree - GitHub</a>
+                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
+                    Linux kernel source tree. Contribute to torvalds/linux development by creating an account on GitHub.
+                </p>
+            </article>
+
+        </div>
+
+        <!-- Paginación falsa -->
+        <div class="flex gap-2 mt-12 pb-8 justify-center">
+            <span class="text-2xl text-blue-600 font-bold">1</span>
+            <a href="#" class="text-2xl text-blue-600 hover:underline">2</a>
+            <a href="#" class="text-2xl text-blue-600 hover:underline">3</a>
+            <a href="#" class="text-2xl text-blue-600 hover:underline">4</a>
+            <a href="#" class="text-2xl text-blue-600 hover:underline">Siguiente ></a>
+        </div>
+
+    </main>
+
+    <script>
+        // Script para leer el parámetro ?q= y ponerlo en el buscador y en los resultados
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q');
+            const searchInput = document.getElementById('search-query');
+
+            if (query) {
+                searchInput.value = query;
+                document.title = `${query} - PortfolioSearch`;
+                // Si quisieras cambiar el texto de los resultados dinámicamente podrías, 
+                // pero para esta demo estático de "Linux" simula perfecto el resultado.
+            } else {
+                // Si no hay query, por defecto pone "linux"
+                searchInput.value = 'linux';
+                document.title = `linux - PortfolioSearch`;
+            }
+        });
+    </script>
+</body>
+</html>
