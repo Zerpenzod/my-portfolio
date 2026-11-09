@@ -11,6 +11,7 @@
         { id: 'inicio',      label: 'Inicio' },
         { id: 'sobremi',     label: 'Sobre mí' },
         { id: 'proyectos',   label: 'Proyectos' },
+        { id: 'juegos',      label: 'Juegos' },
         { id: 'contactame',  label: 'Contáctame' },
         { id: 'terminal',    label: 'Terminal' },
     ];
@@ -39,20 +40,15 @@
         bgAudio:       document.getElementById('bg-audio'),
         btnVideoMode:  document.getElementById('btn-video-mode'),
         btnExitVideo:  document.getElementById('btn-exit-video-mode'),
+        rotateAlert:   document.getElementById('rotate-alert'),
 
         // Menús y Navegación
-        menuOverlay:   document.getElementById('menu-overlay'),
-        btnMobileMenu: document.getElementById('btn-mobile-menu'),
-        mobileMenu:    document.getElementById('mobile-menu'),
+        menuOverlay:      document.getElementById('menu-overlay'),
+        pcSubmenuOverlay: document.getElementById('pc-submenu-overlay'),
+        btnMobileMenu:    document.getElementById('btn-mobile-menu'),
+        mobileMenu:       document.getElementById('mobile-menu'),
         mobileAccordions: document.querySelectorAll('.mobile-accordion'),
         mobileLinks:      document.querySelectorAll('.mobile-link'),
-
-        // Buscador
-        btnSearch:     document.getElementById('search-btn'),
-        searchBar:     document.getElementById('search-bar'),
-        searchForm:    document.getElementById('search-form'),
-        searchInput:   document.getElementById('search-input'),
-        btnCloseSearch:document.getElementById('btn-close-search')
     };
 
     // ============================================================
@@ -72,29 +68,43 @@
     // LÓGICA DE NAVEGACIÓN Y MENÚS
     // ============================================================
     function initNavigation() {
-        // 1. Lógica para el Menú Móvil (El de PC ahora es CSS puro con group-hover)
-        function toggleMobileMenu() {
-            const isOpen = !els.mobileMenu.classList.contains('opacity-0');
-            if (isOpen) {
+        function closeAllPanels() {
+            if (els.mobileMenu && !els.mobileMenu.classList.contains('opacity-0')) {
                 els.mobileMenu.classList.add('-translate-y-[120%]', 'opacity-0', 'pointer-events-none');
                 els.mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+            }
+            if (els.menuOverlay) {
                 els.menuOverlay.classList.add('opacity-0', 'pointer-events-none');
                 els.menuOverlay.classList.remove('opacity-100');
-            } else {
-                els.mobileMenu.classList.remove('-translate-y-[120%]', 'opacity-0', 'pointer-events-none');
-                els.mobileMenu.classList.add('translate-y-0', 'opacity-100');
-                els.menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
-                els.menuOverlay.classList.add('opacity-100');
             }
         }
 
-        els.btnMobileMenu.addEventListener('click', toggleMobileMenu);
+        function toggleMobileMenu() {
+            if (!els.mobileMenu) return;
+            const isOpen = !els.mobileMenu.classList.contains('opacity-0');
+            closeAllPanels();
+            if (!isOpen) {
+                els.mobileMenu.classList.remove('-translate-y-[120%]', 'opacity-0', 'pointer-events-none');
+                els.mobileMenu.classList.add('translate-y-0', 'opacity-100');
+                if (els.menuOverlay) {
+                    els.menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                    els.menuOverlay.classList.add('opacity-100');
+                }
+            }
+        }
 
-        // Acordeones móviles
+        if (els.btnMobileMenu) {
+            els.btnMobileMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
+        }
+
         els.mobileAccordions.forEach(acc => {
             const btn = acc.querySelector('.mobile-accordion-btn');
             const content = acc.querySelector('.mobile-accordion-content');
             const icon = btn.querySelector('svg');
+            if(!btn || !content) return;
 
             btn.addEventListener('click', () => {
                 const isHidden = content.classList.contains('hidden');
@@ -112,58 +122,33 @@
 
         els.mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if (!els.mobileMenu.classList.contains('opacity-0')) toggleMobileMenu();
+                if (els.mobileMenu && !els.mobileMenu.classList.contains('opacity-0')) toggleMobileMenu();
             });
         });
 
-        els.menuOverlay.addEventListener('click', () => {
-            if (!els.mobileMenu.classList.contains('opacity-0')) toggleMobileMenu();
-            if (!els.searchBar.classList.contains('-translate-y-full')) toggleSearchBar();
-        });
-
-        // 2. Lógica de la Barra de Búsqueda
-        function toggleSearchBar() {
-            const isOpen = !els.searchBar.classList.contains('-translate-y-full');
-            
-            if (isOpen) {
-                els.searchBar.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
-                els.searchBar.classList.remove('translate-y-0', 'opacity-100');
-                els.menuOverlay.classList.add('opacity-0', 'pointer-events-none');
-                els.menuOverlay.classList.remove('opacity-100');
-            } else {
-                els.searchBar.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
-                els.searchBar.classList.add('translate-y-0', 'opacity-100');
-                els.menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
-                els.menuOverlay.classList.add('opacity-100');
-                setTimeout(() => els.searchInput.focus(), 100);
-                
-                if (!els.mobileMenu.classList.contains('opacity-0')) toggleMobileMenu();
-            }
-        }
-
-        els.btnSearch.addEventListener('click', toggleSearchBar);
-        els.btnCloseSearch.addEventListener('click', toggleSearchBar);
+        if (els.menuOverlay) els.menuOverlay.addEventListener('click', closeAllPanels);
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !els.searchBar.classList.contains('-translate-y-full')) {
-                toggleSearchBar();
-            }
-        });
-
-        // 3. Redirección al buscar
-        els.searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const query = els.searchInput.value.trim();
-            if (query) {
-                // Redirige a search.html con el parámetro de búsqueda
-                window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-            }
+            if (e.key === 'Escape') closeAllPanels();
         });
     }
 
-    // ... (El resto de funciones: renderReviews, renderSection, initTerminal, initReviewsPanel, initSettings, initVideo, getCurrentHash, handleRouteChange se mantienen exactamente igual) ...
+    // ============================================================
+    // FADE AL ABRIR MENÚS DE PC Y AJUSTES
+    // ============================================================
+    function initPcMenuFade() {
+        const mainNav = document.getElementById('main-nav');
+        if (!mainNav || !els.pcSubmenuOverlay) return;
 
+        mainNav.addEventListener('mouseenter', () => els.pcSubmenuOverlay.classList.add('opacity-100'));
+        mainNav.addEventListener('mouseleave', () => els.pcSubmenuOverlay.classList.remove('opacity-100'));
+    }
+
+    // ============================================================
+    // RESEÑAS
+    // ============================================================
     async function renderReviews() {
+        if(!els.reviews) return;
         els.reviews.innerHTML = '<p class="text-xs text-zinc-600 animate-pulse">Cargando reseñas...</p>';
         try {
             const res = await fetch('/api/getReviews');
@@ -186,11 +171,13 @@
                 </article>
             `).join('');
         } catch (error) {
-            console.error("Error cargando reseñas:", error);
             els.reviews.innerHTML = '<p class="text-xs text-red-500">Error de conexión con la base de datos.</p>';
         }
     }
 
+    // ============================================================
+    // RENDERIZADO DE SECCIONES
+    // ============================================================
     function renderSection(id) {
         const tpl = document.getElementById('tpl-' + id);
         if (!tpl) {
@@ -201,6 +188,9 @@
         if (id === 'terminal') initTerminal();
     }
 
+    // ============================================================
+    // TERMINAL
+    // ============================================================
     function initTerminal() {
         const terminalWindow = document.getElementById('terminal-window');
         const input = document.getElementById('terminal-input');
@@ -237,9 +227,9 @@
                 let output = '';
                 switch (cmd) {
                     case 'ayuda': case 'help':
-                        output = `Comandos: <span class="term-prompt">inicio</span>, <span class="term-prompt">sobremi</span>, <span class="term-prompt">proyectos</span>, <span class="term-prompt">contactame</span>, <span class="term-prompt">clear</span>`;
+                        output = `Comandos: <span class="term-prompt">inicio</span>, <span class="term-prompt">sobremi</span>, <span class="term-prompt">proyectos</span>, <span class="term-prompt">juegos</span>, <span class="term-prompt">contactame</span>, <span class="term-prompt">clear</span>`;
                         break;
-                    case 'inicio': case 'sobremi': case 'proyectos': case 'contactame':
+                    case 'inicio': case 'sobremi': case 'proyectos': case 'juegos': case 'contactame':
                         window.location.hash = cmd;
                         return;
                     case 'clear':
@@ -254,7 +244,11 @@
         });
     }
 
+    // ============================================================
+    // PANEL DE RESEÑAS (formulario)
+    // ============================================================
     function initReviewsPanel() {
+        if(!els.btnToggle) return;
         let isExpanded = false;
         els.btnToggle.addEventListener('click', () => {
             isExpanded = !isExpanded;
@@ -292,7 +286,6 @@
                     alert(`Error: ${errorData.error || 'No se pudo guardar la reseña'}`);
                 }
             } catch (error) {
-                console.error("Error al enviar:", error);
                 alert("No se pudo conectar con el servidor.");
             } finally {
                 submitBtn.textContent = originalText;
@@ -301,44 +294,60 @@
         });
     }
 
+    // ============================================================
+    // AJUSTES (música, tema, modo video)
+    // ============================================================
     function initSettings() {
         function toggleSettingsPanel(forceClose = false) {
+            if (!els.settingsPanel) return;
             const isCurrentlyOpen = els.settingsPanel.classList.contains('opacity-100');
             if (isCurrentlyOpen || forceClose) {
                 els.settingsPanel.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
                 els.settingsPanel.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+                if (els.pcSubmenuOverlay) els.pcSubmenuOverlay.classList.remove('opacity-100');
             } else {
                 els.settingsPanel.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
                 els.settingsPanel.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                if (els.pcSubmenuOverlay) els.pcSubmenuOverlay.classList.add('opacity-100');
             }
         }
 
-        els.btnSettings.addEventListener('click', (e) => { e.stopPropagation(); toggleSettingsPanel(); });
+        if(els.btnSettings) {
+            els.btnSettings.addEventListener('click', (e) => { e.stopPropagation(); toggleSettingsPanel(); });
+        }
         document.addEventListener('click', (e) => {
-            if (!els.settingsPanel.contains(e.target) && !els.btnSettings.contains(e.target)) toggleSettingsPanel(true);
+            if (els.settingsPanel && !els.settingsPanel.contains(e.target) && els.btnSettings && !els.btnSettings.contains(e.target)) toggleSettingsPanel(true);
         });
+        if (els.pcSubmenuOverlay) {
+            els.pcSubmenuOverlay.addEventListener('click', () => toggleSettingsPanel(true));
+        }
 
+        // Música
         const musicState = localStorage.getItem('portfolio_music') || 'off';
-        if (musicState === 'on') els.bgAudio.play().then(() => updateMusicBtn(true)).catch(() => updateMusicBtn(false));
+        if (musicState === 'on' && els.bgAudio) els.bgAudio.play().then(() => updateMusicBtn(true)).catch(() => updateMusicBtn(false));
 
-        document.getElementById('btn-music').addEventListener('click', () => {
-            if (els.bgAudio.paused) {
-                els.bgAudio.play();
-                localStorage.setItem('portfolio_music', 'on');
-                updateMusicBtn(true);
-            } else {
-                els.bgAudio.pause();
-                localStorage.setItem('portfolio_music', 'off');
-                updateMusicBtn(false);
-            }
-        });
+        const musicBtn = document.getElementById('btn-music');
+        if(musicBtn) {
+            musicBtn.addEventListener('click', () => {
+                if (els.bgAudio.paused) {
+                    els.bgAudio.play();
+                    localStorage.setItem('portfolio_music', 'on');
+                    updateMusicBtn(true);
+                } else {
+                    els.bgAudio.pause();
+                    localStorage.setItem('portfolio_music', 'off');
+                    updateMusicBtn(false);
+                }
+            });
+        }
 
         function updateMusicBtn(isPlaying) {
-            const btn = document.getElementById('btn-music');
-            btn.textContent = isPlaying ? 'ON' : 'OFF';
-            btn.className = isPlaying ? 'px-3 py-1 rounded-md text-xs font-medium bg-brand text-zinc-950 transition' : 'px-3 py-1 rounded-md text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition';
+            if(!musicBtn) return;
+            musicBtn.textContent = isPlaying ? 'ON' : 'OFF';
+            musicBtn.className = isPlaying ? 'px-3 py-1 rounded-md text-xs font-medium bg-brand text-zinc-950 transition' : 'px-3 py-1 rounded-md text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition';
         }
 
+        // Temas
         const savedTheme = localStorage.getItem('portfolio_theme') || 'theme-green';
         document.body.className = document.body.className.replace(/theme-\w+/g, '');
         document.body.classList.add(savedTheme);
@@ -352,6 +361,20 @@
             });
         });
 
+        // Modo Video y Alerta de Rotación
+        function checkOrientation() {
+            if (!els.rotateAlert) return;
+            const isMobile = window.innerWidth < 1024;
+            const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+            const isVideoMode = document.body.classList.contains('video-only');
+
+            if (isVideoMode && isMobile && isPortrait) {
+                els.rotateAlert.classList.add('active');
+            } else {
+                els.rotateAlert.classList.remove('active');
+            }
+        }
+
         function setVideoMode(activate) {
             if (activate) {
                 document.body.classList.add('video-only');
@@ -360,44 +383,64 @@
                 els.btnVideoMode.classList.remove('bg-zinc-800', 'text-zinc-300');
                 els.btnExitVideo.classList.remove('hidden');
                 toggleSettingsPanel(true);
+                checkOrientation();
             } else {
                 document.body.classList.remove('video-only');
                 els.btnVideoMode.textContent = 'OFF';
                 els.btnVideoMode.classList.remove('bg-brand', 'text-zinc-950');
                 els.btnVideoMode.classList.add('bg-zinc-800', 'text-zinc-300');
                 els.btnExitVideo.classList.add('hidden');
+                if(els.rotateAlert) els.rotateAlert.classList.remove('active');
             }
         }
 
-        els.btnVideoMode.addEventListener('click', () => {
-            const isCurrentlyActive = document.body.classList.contains('video-only');
-            setVideoMode(!isCurrentlyActive);
-        });
-        els.btnExitVideo.addEventListener('click', () => setVideoMode(false));
+        if(els.btnVideoMode) {
+            els.btnVideoMode.addEventListener('click', () => {
+                const isCurrentlyActive = document.body.classList.contains('video-only');
+                setVideoMode(!isCurrentlyActive);
+            });
+        }
+        if(els.btnExitVideo) {
+            els.btnExitVideo.addEventListener('click', () => setVideoMode(false));
+        }
+
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
     }
 
+    // ============================================================
+    // VIDEO DE FONDO (AUTO-PLAY INFALIBLE)
+    // ============================================================
     function initVideo() {
         const video = document.getElementById('bg-video');
         if (!video) return;
+        
         video.muted = true;
         video.defaultMuted = true;
         video.setAttribute('muted', '');
         video.setAttribute('playsinline', '');
         video.setAttribute('webkit-playsinline', '');
+
         const playPromise = video.play();
+
         if (playPromise !== undefined) {
             playPromise.catch(() => {
                 const forcePlay = () => {
                     video.play();
                     document.removeEventListener('click', forcePlay);
                     document.removeEventListener('touchstart', forcePlay);
+                    document.removeEventListener('scroll', forcePlay);
                 };
-                document.addEventListener('click', forcePlay, { once: true });
-                document.addEventListener('touchstart', forcePlay, { once: true });
+                document.addEventListener('click', forcePlay);
+                document.addEventListener('touchstart', forcePlay);
+                document.addEventListener('scroll', forcePlay);
             });
         }
     }
 
+    // ============================================================
+    // ROUTER (hash)
+    // ============================================================
     function getCurrentHash() {
         const raw = window.location.hash.replace('#', '').trim();
         return isKnownSection(raw) ? raw : DEFAULT_SECTION;
@@ -407,9 +450,13 @@
         renderSection(getCurrentHash());
     }
 
+    // ============================================================
+    // INIT
+    // ============================================================
     function init() {
         initVideo();
         initNavigation(); 
+        initPcMenuFade();
         renderReviews(); 
         initSettings();
         initReviewsPanel();
@@ -419,7 +466,8 @@
         }
         renderSection(getCurrentHash());
         window.addEventListener('hashchange', handleRouteChange);
-        els.year.textContent = String(new Date().getFullYear());
+        
+        if(els.year) els.year.textContent = String(new Date().getFullYear());
     }
 
     if (document.readyState === 'loading') {

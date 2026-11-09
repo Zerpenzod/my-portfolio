@@ -3,151 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados de búsqueda</title>
+    <title>Búsqueda — Sebastián Pérez</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        body { font-family: Arial, sans-serif; background-color: #fff; color: #202124; }
-        .result-link { color: #1a0dab; }
-        .result-link:hover { text-decoration: underline; }
-        .result-url { color: #006621; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .font-mono { font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important; }
+
+        /* Colores estilo Google Dark Mode adaptados al Portafolio */
+        .google-link { color: #c084fc; }
+        .google-link:hover { text-decoration: underline; }
+        .google-url { color: #a1a1aa; } /* zinc-400 */
+        .google-text { color: #a1a1aa; }
+        
+        mark { background: transparent; color: #fff; font-weight: bold; }
+        
+        .fade-in { animation: fadeIn .2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Pestañas estilo Google */
+        .tab-btn {
+            padding-bottom: 12px;
+            border-bottom: 3px solid transparent;
+            color: #9aa0a6;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .tab-btn:hover {
+            color: #f4f4f5; /* zinc-100 */
+        }
+        .tab-btn.active {
+            color: #c084fc;
+            border-bottom-color: #c084fc;
+        }
+
+        /* Scrollbar acorde al index */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+        
+        /* Ocultar barra de scroll en las pestañas */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col">
 
-    <!-- Header de Búsqueda (Estilo DuckDuckGo) -->
-    <header class="border-b border-gray-200 py-4 px-6 flex items-center gap-6 sticky top-0 bg-white z-10">
-        <a href="index.html" class="text-2xl font-bold tracking-tighter text-gray-800 hover:text-black">
-            Portfolio<span class="text-blue-600">Search</span>
-        </a>
+    <!-- HEADER ESTILO GOOGLE -->
+    <header class="bg-zinc-950 sticky top-0 z-20 border-b border-zinc-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-4 flex flex-col">
+            
+            <!-- Logo y Barra de Búsqueda -->
+            <div class="flex items-center gap-6 sm:gap-10">
+                <a href="index.html" class="text-2xl sm:text-3xl font-bold tracking-tight text-white shrink-0 hover:opacity-80 transition hidden sm:block">
+                    Portfolio<span class="text-purple-400">Search</span>
+                </a>
+                <a href="index.html" class="text-xl font-bold tracking-tight text-white shrink-0 hover:opacity-80 transition sm:hidden">
+                    P<span class="text-blue-400">S</span>
+                </a>
 
-        <form action="search.html" method="GET" class="flex-1 max-w-2xl flex items-center bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-md transition-shadow px-4 py-2">
-            <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" name="q" id="search-query" placeholder="Buscar..." class="w-full outline-none text-gray-800 bg-transparent" autocomplete="off">
-            <button type="submit" class="hidden">Buscar</button>
-        </form>
+                <!-- Input con Iconos a la derecha -->
+                <form action="search.html" method="GET" class="flex-1 max-w-3xl flex items-center bg-zinc-900 border border-zinc-800 hover:bg-zinc-900/80 hover:border-zinc-600 focus-within:bg-zinc-900 focus-within:border-zinc-500 rounded-full shadow-lg px-5 py-2.5 transition-all group relative">
+                    <input type="text" name="q" id="search-query" placeholder="Buscar en el portfolio…" class="w-full outline-none text-zinc-100 bg-transparent placeholder-zinc-400 text-base" autocomplete="off" autofocus>
+                    
+                    <div class="flex items-center gap-3 text-zinc-400 shrink-0 ml-2">
+                        <button type="button" id="clear-btn" class="hidden hover:text-white transition p-1">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                        <div class="w-[1px] h-6 bg-zinc-700 hidden sm:block"></div>
+                        <button type="button" class="hover:text-white transition hidden sm:block">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                        </button>
+                        <button type="submit" class="hover:text-blue-400 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Pestañas (Tabs) -->
+            <nav class="flex items-center gap-6 text-sm overflow-x-auto whitespace-nowrap pl-0 mt-6 no-scrollbar">
+                <button data-tab="all" class="tab-btn active flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    Todo
+                </button>
+                <button data-tab="image" class="tab-btn flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Imágenes
+                </button>
+                <button data-tab="video" class="tab-btn flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Videos
+                </button>
+            </nav>
+        </div>
     </header>
 
-    <!-- Contenido de Resultados -->
-    <main class="flex-1 max-w-3xl px-6 py-6 ml-0 md:ml-40">
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1 w-full max-w-5xl px-4 sm:px-6 py-6 mx-auto">
+        <div id="search-status" class="text-[13px] text-zinc-400 mb-6 pl-1"></div>
         
-        <!-- Tabs de Navegación -->
-        <div class="flex gap-6 text-sm text-gray-500 mb-6 border-b border-gray-100 pb-2">
-            <span class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-2">Todo</span>
-            <a href="#" class="hover:text-gray-800">Imágenes</a>
-            <a href="#" class="hover:text-gray-800">Videos</a>
-            <a href="#" class="hover:text-gray-800">Noticias</a>
-        </div>
-
-        <!-- Estadísticas falsas de búsqueda -->
-        <p class="text-xs text-gray-500 mb-6">Aproximadamente 1.230.000 resultados (0,42 segundos)</p>
-
-        <!-- Lista de Resultados Ficticios -->
-        <div class="space-y-8">
-            
-            <!-- Resultado 1 -->
-            <article>
-                <div class="flex items-center gap-2 mb-1">
-                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-xs text-blue-600 font-bold">L</div>
-                    <div>
-                        <p class="text-sm text-gray-800">Wikipedia</p>
-                        <p class="text-xs result-url">https://es.wikipedia.org › wiki › Linux</p>
-                    </div>
-                </div>
-                <a href="#" class="text-xl result-link font-medium">Linux - Wikipedia, la enciclopedia libre</a>
-                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                    Linux es un núcleo de sistema operativo libre tipo Unix multiplataforma, basado en el estándar POSIX y en el software GNU. Fue creado por Linus Torvalds en 1991.
-                </p>
-            </article>
-
-            <!-- Resultado 2 -->
-            <article>
-                <div class="flex items-center gap-2 mb-1">
-                    <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center text-xs text-red-600 font-bold">R</div>
-                    <div>
-                        <p class="text-sm text-gray-800">Red Hat</p>
-                        <p class="text-xs result-url">https://www.redhat.com › es › topics › linux</p>
-                    </div>
-                </div>
-                <a href="#" class="text-xl result-link font-medium">¿Qué es Linux? - Red Hat</a>
-                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                    Linux es un sistema operativo de código abierto. Se trata de un sistema operativo que se puede ejecutar en servidores, ordenadores de escritorio, dispositivos móviles, etc.
-                </p>
-            </article>
-
-            <!-- Resultado 3 -->
-            <article>
-                <div class="flex items-center gap-2 mb-1">
-                    <div class="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-600 font-bold">L</div>
-                    <div>
-                        <p class="text-sm text-gray-800">Linux.org</p>
-                        <p class="text-xs result-url">https://www.linux.org</p>
-                    </div>
-                </div>
-                <a href="#" class="text-xl result-link font-medium">Linux.org - The Linux Home Page</a>
-                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                    The primary purpose of Linux.org is to provide an easy to use, friendly, and informative website for Linux users and enthusiasts to learn about Linux.
-                </p>
-            </article>
-
-            <!-- Resultado 4 -->
-            <article>
-                <div class="flex items-center gap-2 mb-1">
-                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-xs text-green-600 font-bold">U</div>
-                    <div>
-                        <p class="text-sm text-gray-800">Ubuntu</p>
-                        <p class="text-xs result-url">https://ubuntu.com › download › desktop</p>
-                    </div>
-                </div>
-                <a href="#" class="text-xl result-link font-medium">Descargar Ubuntu | Ubuntu</a>
-                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                    Ubuntu es el sistema operativo Linux más popular del mundo. Únete a la comunidad y descarga la versión más reciente para tu escritorio o servidor.
-                </p>
-            </article>
-
-            <!-- Resultado 5 -->
-            <article>
-                <div class="flex items-center gap-2 mb-1">
-                    <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-xs text-purple-600 font-bold">G</div>
-                    <div>
-                        <p class="text-sm text-gray-800">GitHub</p>
-                        <p class="text-xs result-url">https://github.com › torvalds › linux</p>
-                    </div>
-                </div>
-                <a href="#" class="text-xl result-link font-medium">torvalds/linux: Linux kernel source tree - GitHub</a>
-                <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                    Linux kernel source tree. Contribute to torvalds/linux development by creating an account on GitHub.
-                </p>
-            </article>
-
-        </div>
-
-        <!-- Paginación falsa -->
-        <div class="flex gap-2 mt-12 pb-8 justify-center">
-            <span class="text-2xl text-blue-600 font-bold">1</span>
-            <a href="#" class="text-2xl text-blue-600 hover:underline">2</a>
-            <a href="#" class="text-2xl text-blue-600 hover:underline">3</a>
-            <a href="#" class="text-2xl text-blue-600 hover:underline">4</a>
-            <a href="#" class="text-2xl text-blue-600 hover:underline">Siguiente ></a>
-        </div>
-
+        <div id="results-text" class="space-y-8 max-w-2xl"></div>
+        <div id="results-image" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 hidden"></div>
+        <div id="results-video" class="space-y-6 max-w-3xl hidden"></div>
     </main>
 
+    <!-- FOOTER SIMPLE -->
+    <footer class="border-t border-zinc-800 bg-zinc-950 py-4 mt-auto">
+        <div class="max-w-5xl mx-auto px-6 text-xs text-zinc-500 flex justify-between">
+            <span>© <span id="year"></span> — Sebastián Pérez</span>
+            <span class="font-mono">PortfolioSearch Engine</span>
+        </div>
+    </footer>
+
+    <!-- Se adjunta el JS y no con la buena practica en otro archivo.js ya que se toma en cuenta estos aspectos:
+     
+     -Caché del navegador: El navegador probablemente guardó una versión vieja o vacía de search-index.js.
+     -Problema de ruta (Path): Si el archivo no está en la misma carpeta, da error 404.
+     -Error de sintaxis: Si se borra una coma, falla todo.
+     -Orden de carga: Si el HTML busca antes de que cargue el JS, no hay datos.-->
     <script>
-        // Script para leer el parámetro ?q= y ponerlo en el buscador y en los resultados
+        // ==========================================
+        // ÍNDICE DE BÚSQUEDA (INTEGRADO PARA EVITAR ERRORES DE CACHÉ)
+        // ==========================================
+        const PORTFOLIO_SEARCH_INDEX = [
+            { title: "Inicio | Sebastián Pérez", description: "Página de inicio del portafolio de Sebastián Pérez. Software Developer apasionado por la tecnología y los sistemas retro.", url: "index.html#inicio", type: "Página Principal", source: "sebastianperez.com", media_type: "text", keywords: ["inicio", "home", "portada", "principal", "sebastian perez", "software developer"] },
+            { title: "Sobre mí | Biografía y Trayectoria", description: "Hola, soy un desarrollador apasionado por la tecnología, los sistemas retro y la programación. Me especializo en soluciones empresariales (Cobol, DB2, JCL) sin dejar de lado las tecnologías modernas.", url: "index.html#sobremi", type: "Información", source: "sebastianperez.com", media_type: "text", keywords: ["sobre mi", "biografia", "perfil", "desarrollador", "cobol", "db2", "jcl", "retro", "habilidades", "curriculum", "cv"] },
+            { title: "Proyectos | Desarrollo de Software", description: "Explora los proyectos de desarrollo web, aplicaciones móviles y backend. Incluye el sistema Core Bank AS/400 con integración Full Stack.", url: "index.html#proyectos", type: "Portafolio", source: "sebastianperez.com", media_type: "text", keywords: ["proyectos", "desarrollo web", "apps moviles", "backend", "full stack", "core bank", "as/400", "trabajos"] },
+            { title: "Juegos | Mis Hobbies e Inspiración", description: "Aquí recopilo los juegos que he disfrutado y que forman parte de mi día a día. No solo como jugador, sino también como fuente de inspiración para mis proyectos.", url: "index.html#juegos", type: "Hobbies", source: "sebastianperez.com", media_type: "text", keywords: ["juegos", "hobbies", "gaming", "videojuegos", "inspiracion", "pasatiempos", "world of warcraft"] },
+            { title: "Contáctame | Redes Sociales y Correo", description: "Puedes encontrarme en GitHub, Instagram, YouTube, Discord o enviarme un correo directo para oportunidades profesionales.", url: "index.html#contactame", type: "Contacto", source: "sebastianperez.com", media_type: "text", keywords: ["contacto", "contactame", "redes sociales", "correo", "email", "github", "instagram", "youtube", "discord", "gmail"] },
+            { title: "Terminal Interactiva | Sebastián Pérez", description: "Terminal web interactiva para navegar por el portafolio usando comandos como ayuda, inicio, sobremi, proyectos, juegos, clear.", url: "index.html#terminal", type: "Herramienta", source: "sebastianperez.com", media_type: "text", keywords: ["terminal", "consola", "comandos", "bash", "help", "ayuda", "clear", "shell", "cliente"] },
+            { title: "Core Bank AS/400 - Full Stack Modernization", description: "Estoy desarrollando un sistema financiero con AS/400, integrando lógica COBOL y DB2. Modernización de sistemas bancarios legacy hacia tecnologías web.", url: "index.html#proyectos", type: "Proyecto Destacado", source: "sebastianperez.com", media_type: "text", keywords: ["core bank", "as400", "as/400", "cobol", "db2", "jcl", "sistema financiero", "banco", "modernizacion", "legacy", "en progreso"] },
+            { title: "World of Warcraft (WoW)", description: "Un mundo masivo de fantasía que he explorado por años. Raids, PvP, M+, y sobre todo, la comunidad. Desarrollado por Blizzard Entertainment.", url: "index.html#juegos", type: "Videojuego", source: "sebastianperez.com", media_type: "text", keywords: ["world of warcraft", "wow", "blizzard", "azeroth", "raids", "pvp", "m+", "mmorpg", "fantasia", "juego"] },
+            { title: "GitHub - @Zerpenzod", description: "Mi perfil de GitHub donde subo mis proyectos, repositorios de código abierto y experimentos de programación.", url: "https://github.com/Zerpenzod", type: "Enlace Externo", source: "github.com", media_type: "text", keywords: ["github", "zerpenzod", "codigo", "repositorios", "open source", "git"] },
+            { title: "Discord - @zerpenzod", description: "Mi perfil de Discord. Únete a la conversación, contacta conmigo o juega World of Warcraft.", url: "https://discord.com/users/1499261136049275023", type: "Red Social", source: "discord.com", media_type: "text", keywords: ["discord", "zerpenzod", "chat", "comunidad", "juegos", "wow"] },
+            { title: "Correo Directo - camiperezsebas34@gmail.com", description: "Envíame un correo directo para contactarte por oportunidades profesionales, colaboraciones o dudas.", url: "https://mail.google.com/mail/?view=cm&fs=1&to=camiperezsebas34@gmail.com", type: "Contacto Directo", source: "gmail.com", media_type: "text", keywords: ["correo", "email", "gmail", "contacto", "camiperezsebas34", "enviar mensaje", "profesional"] },
+            { title: "Core Bank AS/400 Interfaz", description: "Interfaz de usuario del sistema financiero Core Bank.", url: "index.html#proyectos", type: "Imagen", source: "sebastianperez.com", media_type: "image", thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80", keywords: ["core bank", "interfaz", "sistema", "financiero", "as400", "cobol", "proyecto"] },
+            { title: "Código COBOL y DB2", description: "Lógica de backend utilizada en el sistema bancario.", url: "index.html#proyectos", type: "Imagen", source: "sebastianperez.com", media_type: "image", thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80", keywords: ["cobol", "db2", "codigo", "programacion", "backend", "legacy"] },
+            { title: "World of Warcraft - Azeroth", description: "Paisaje del mundo de Azeroth en World of Warcraft.", url: "index.html#juegos", type: "Imagen", source: "sebastianperez.com", media_type: "image", thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80", keywords: ["wow", "world of warcraft", "azeroth", "paisaje", "juego", "fantasia"] },
+            { title: "Terminal de Comandos", description: "Interfaz de la terminal interactiva del portafolio.", url: "index.html#terminal", type: "Imagen", source: "sebastianperez.com", media_type: "image", thumbnail: "https://images.unsplash.com/photo-1626544827763-d516dce335e2?auto=format&fit=crop&w=600&q=80", keywords: ["terminal", "consola", "comandos", "interfaz", "desarrollo"] },
+            { title: "Core Bank - Demostración de Sistema", description: "Video demostrativo del funcionamiento del sistema Core Bank AS/400.", url: "index.html#proyectos", type: "Video", source: "sebastianperez.com", media_type: "video", thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80", duration: "5:32", keywords: ["core bank", "video", "demostracion", "sistema", "proyectos"] },
+            { title: "World of Warcraft - Gameplay", description: "Gameplay y aventuras en el mundo de Azeroth.", url: "index.html#juegos", type: "Video", source: "sebastianperez.com", media_type: "video", thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80", duration: "12:45", keywords: ["wow", "world of warcraft", "video", "gameplay", "juego", "azeroth"] },
+            { title: "Tutorial de Terminal", description: "Aprende a usar la terminal interactiva del portafolio.", url: "index.html#terminal", type: "Video", source: "sebastianperez.com", media_type: "video", thumbnail: "https://images.unsplash.com/photo-1626544827763-d516dce335e2?auto=format&fit=crop&w=800&q=80", duration: "2:15", keywords: ["terminal", "video", "tutorial", "comandos", "consola"] }
+        ];
+
+        // ==========================================
+        // LÓGICA DEL BUSCADOR
+        // ==========================================
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
-            const query = params.get('q');
-            const searchInput = document.getElementById('search-query');
+            const query = (params.get('q') || '').trim();
+            const currentTab = params.get('tab') || 'all';
+            
+            const input = document.getElementById('search-query');
+            const clearBtn = document.getElementById('clear-btn');
+            const status = document.getElementById('search-status');
+            const tabs = document.querySelectorAll('.tab-btn');
+            
+            const containerText = document.getElementById('results-text');
+            const containerImage = document.getElementById('results-image');
+            const containerVideo = document.getElementById('results-video');
 
-            if (query) {
-                searchInput.value = query;
-                document.title = `${query} - PortfolioSearch`;
-                // Si quisieras cambiar el texto de los resultados dinámicamente podrías, 
-                // pero para esta demo estático de "Linux" simula perfecto el resultado.
-            } else {
-                // Si no hay query, por defecto pone "linux"
-                searchInput.value = 'linux';
-                document.title = `linux - PortfolioSearch`;
+            document.getElementById('year').textContent = new Date().getFullYear();
+            input.value = query;
+            document.title = query ? `${query} — PortfolioSearch` : 'Búsqueda — Portfolio';
+
+            // Botón de limpiar
+            if (query) clearBtn.classList.remove('hidden');
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length > 0) clearBtn.classList.remove('hidden');
+                else clearBtn.classList.add('hidden');
+            });
+            clearBtn.addEventListener('click', () => {
+                input.value = '';
+                clearBtn.classList.add('hidden');
+                input.focus();
+            });
+
+            // Configurar pestañas
+            tabs.forEach(tab => {
+                if (tab.dataset.tab === currentTab) tab.classList.add('active');
+                else tab.classList.remove('active');
+                
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = new URL(window.location);
+                    url.searchParams.set('tab', tab.dataset.tab);
+                    window.location.href = url.toString();
+                });
+            });
+
+            // Normalización
+            const normalize = (str) => String(str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const escapeHtml = (str) => String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+            function highlight(text, tokens) {
+                const safe = escapeHtml(text);
+                const parts = tokens.filter(t => t.length > 1).map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+                if (!parts.length) return safe;
+                try {
+                    return safe.replace(new RegExp(`(${parts.join('|')})`, 'gi'), '<mark class="text-white font-bold">$1</mark>');
+                } catch { return safe; }
+            }
+
+            // Búsqueda Vacía
+            if (!query) {
+                status.textContent = 'Escribe algo en el buscador para empezar.';
+                containerText.innerHTML = `
+                    <div class="rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 fade-in">
+                        <p class="text-zinc-300 mb-4 text-sm font-medium">Búsquedas populares:</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${['proyectos', 'world of warcraft', 'wow', 'cobol', 'contacto', 'terminal'].map(w =>
+                                `<a href="search.html?q=${encodeURIComponent(w)}" class="px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-600 text-sm text-zinc-300 transition-colors">${w}</a>`
+                            ).join('')}
+                        </div>
+                    </div>`;
+                return;
+            }
+
+            // Puntuación
+            const tokens = normalize(query).split(/\s+/).filter(Boolean);
+            
+            const matches = PORTFOLIO_SEARCH_INDEX.map(item => {
+                const title = normalize(item.title || '');
+                const desc = normalize(item.description || '');
+                const kws = (item.keywords || []).map(normalize);
+                let score = 0;
+
+                tokens.forEach(t => {
+                    if (!t) return;
+                    if (title.includes(t)) score += 20;
+                    if (kws.some(k => k.includes(t))) score += 15;
+                    if (desc.includes(t)) score += 10;
+                });
+
+                return { item, score };
+            }).filter(r => r.score > 0).sort((a, b) => b.score - a.score);
+
+            // Filtrar por pestaña
+            let filteredMatches = matches;
+            if (currentTab === 'image') {
+                filteredMatches = matches.filter(m => m.item.media_type === 'image');
+            } else if (currentTab === 'video') {
+                filteredMatches = matches.filter(m => m.item.media_type === 'video');
+            }
+
+            const timeFake = (Math.random() * 0.5 + 0.1).toFixed(2);
+            status.textContent = `Aproximadamente ${filteredMatches.length} resultado${filteredMatches.length === 1 ? '' : 's'} (${timeFake} segundos)`;
+
+            // Sin resultados
+            if (filteredMatches.length === 0) {
+                let noResultsHtml = `
+                    <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-8 fade-in text-center max-w-2xl">
+                        <p class="text-lg text-zinc-200 mb-2 font-medium">No se han encontrado resultados para “<span class="text-white font-bold">${escapeHtml(query)}</span>”</p>
+                        <p class="text-sm text-zinc-500 mb-6">Prueba con palabras clave diferentes o revisa la ortografía.</p>
+                        <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-600 text-sm text-white rounded-lg transition-colors">
+                            Volver al inicio
+                        </a>
+                    </div>`;
+                
+                if (currentTab === 'all') containerText.innerHTML = noResultsHtml;
+                if (currentTab === 'image') containerImage.innerHTML = `<div class="col-span-full">${noResultsHtml}</div>`;
+                if (currentTab === 'video') containerVideo.innerHTML = noResultsHtml;
+                return;
+            }
+
+            // Renderizar según pestaña
+            if (currentTab === 'all') {
+                containerText.classList.remove('hidden');
+                containerImage.classList.add('hidden');
+                containerVideo.classList.add('hidden');
+                
+                containerText.innerHTML = filteredMatches.map(({ item }) => {
+                    let visualUrl = 'sebas.com';
+                    if(item.url) {
+                        visualUrl = item.url.replace('index.html', '').replace('#', ' > ');
+                        if(visualUrl === '') visualUrl = 'sebas.com';
+                    }
+                    return `
+                    <article class="fade-in group">
+                        <div class="flex items-center gap-2 text-sm mb-1">
+                            <div class="w-7 h-7 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0">
+                                <span class="text-[10px] text-zinc-400 font-mono">S</span>
+                            </div>
+                            <div class="flex flex-col min-w-0 leading-tight">
+                                <span class="text-zinc-200 truncate">${escapeHtml(item.source || 'Portafolio Personal')}</span>
+                                <span class="google-url text-[12px] truncate">${escapeHtml(visualUrl)}</span>
+                            </div>
+                        </div>
+                        <a href="${escapeHtml(item.url || '#')}" class="google-link text-xl font-medium block mt-1 hover:underline cursor-pointer">
+                            ${highlight(item.title, tokens)}
+                        </a>
+                        <p class="google-text text-[14px] mt-1 leading-relaxed">
+                            ${highlight(item.description, tokens)}
+                        </p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px] uppercase tracking-wider font-bold text-zinc-400">${escapeHtml(item.type || 'Resultado')}</span>
+                        </div>
+                    </article>`;
+                }).join('');
+                
+            } else if (currentTab === 'image') {
+                containerText.classList.add('hidden');
+                containerImage.classList.remove('hidden');
+                containerVideo.classList.add('hidden');
+                
+                containerImage.innerHTML = filteredMatches.map(({ item }) => `
+                    <div class="fade-in group cursor-pointer">
+                        <div class="aspect-square rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 group-hover:border-blue-500/50 transition-colors relative">
+                            <img src="${item.thumbnail || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${escapeHtml(item.title)}">
+                        </div>
+                        <div class="mt-2">
+                            <p class="text-sm text-zinc-200 font-medium truncate">${highlight(item.title, tokens)}</p>
+                            <p class="text-[11px] text-zinc-500 truncate">${escapeHtml(item.source)}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } else if (currentTab === 'video') {
+                containerText.classList.add('hidden');
+                containerImage.classList.add('hidden');
+                containerVideo.classList.remove('hidden');
+                
+                containerVideo.innerHTML = filteredMatches.map(({ item }) => `
+                    <div class="fade-in flex flex-col sm:flex-row gap-4 group">
+                        <div class="w-full sm:w-64 aspect-video rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 relative shrink-0">
+                            <img src="${item.thumbnail || 'https://images.unsplash.com/photo-1626544827763-d516dce335e2?auto=format&fit=crop&w=400&q=80'}" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity" alt="${escapeHtml(item.title)}">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                            <span class="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1.5 py-0.5 rounded font-medium">${item.duration || '10:00'}</span>
+                        </div>
+                        <div class="flex-1 py-1">
+                            <a href="${escapeHtml(item.url || '#')}" class="google-link text-lg font-medium block leading-tight group-hover:underline">
+                                ${highlight(item.title, tokens)}
+                            </a>
+                            <p class="text-[12px] text-zinc-400 mt-1">${escapeHtml(item.source)}</p>
+                            <p class="google-text text-[13px] mt-2 leading-relaxed line-clamp-2">
+                                ${highlight(item.description, tokens)}
+                            </p>
+                        </div>
+                    </div>
+                `).join('');
             }
         });
     </script>
