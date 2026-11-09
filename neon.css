@@ -1,0 +1,52 @@
+/* Borde Gamer RGB con Resplandor */
+.gamer-border {
+    position: relative;
+    /* Fondo más oscuro para que el texto resalte y no se pierda con la luz */
+    background-color: rgba(9, 9, 11, 0.75) !important; 
+    backdrop-filter: blur(16px);
+    border-radius: 1rem;
+    z-index: 1;
+}
+
+/* Capa trasera: El resplandor difuminado (Glow) */
+.gamer-border::before {
+    content: "";
+    position: absolute;
+    inset: -4px; 
+    border-radius: 1.2rem;
+    background: linear-gradient(90deg, #a855f7, #ec4899, #3b82f6, #a855f7);
+    background-size: 300% 300%;
+    animation: gamer-rgb 3s linear infinite;
+    z-index: -1;
+    filter: blur(15px); /* Esto crea el efecto de luz neón */
+    opacity: 0.7;
+}
+
+/* Capa delantera: El borde sólido y brillante */
+.gamer-border::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    padding: 2px;
+    background: linear-gradient(90deg, #a855f7, #ec4899, #3b82f6, #a855f7);
+    background-size: 300% 300%;
+    animation: gamer-rgb 3s linear infinite;
+    
+    /* Recorta el centro para que el fondo sea transparente */
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+}
+
+@keyframes gamer-rgb {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Efecto de luz en el texto para que resalte aún más */
+.text-gamer-glow {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(168, 85, 247, 0.5);
+}
