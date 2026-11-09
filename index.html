@@ -217,19 +217,24 @@
                             Juegos
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3 transition-transform duration-300 group-hover/games:rotate-180"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                         </a>
-                        <div class="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible translate-y-1 group-hover/games:opacity-100 group-hover/games:visible group-hover/games:translate-y-0 transition-all duration-200 ease-out z-50">
-                            <div class="w-72 bg-zinc-900/95 backdrop-blur-2xl border border-zinc-700/80 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden ring-1 ring-black/40">
-                                <div class="p-2">
-                                    <a href="#juegos" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-zinc-800/70 transition-colors group/item">
-                                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/30 to-amber-700/20 border border-amber-500/40 flex items-center justify-center text-amber-300 text-[10px] font-bold tracking-wider shrink-0">WoW</div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-semibold text-zinc-200 group-hover/item:text-amber-300 transition-colors">World of Warcraft</p>
-                                            <p class="text-[10px] text-zinc-500 group-hover/item:text-zinc-400 transition-colors truncate">Azeroth awaits...</p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible translate-y-1 group-hover/games:opacity-100 group-hover/games:visible group-hover/games:translate-y-0 transition-all duration-200 ease-out z-50">
+    <div class="w-72 bg-zinc-900/95 backdrop-blur-2xl border border-zinc-700/80 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden ring-1 ring-black/40">
+        <div class="p-2">
+            <a href="#juegos" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-zinc-800/70 transition-colors group/item">
+                
+                <!-- ICONO DE WOW -->
+                <div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-zinc-700/50 shadow-sm">
+                    <img src="img/icon_wow.png" alt="Icono WoW" class="w-full h-full object-cover">
+                </div>
+
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-zinc-200 group-hover/item:text-amber-300 transition-colors">World of Warcraft</p>
+                        <p class="text-[10px] text-zinc-500 group-hover/item:text-zinc-400 transition-colors truncate">Noticias y demás</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
                     </li>
                     <li>
                         <a href="#terminal" class="relative inline-flex items-center px-3 py-2 rounded-lg text-brand font-bold hover:bg-brand/10 transition-all duration-200">Terminal</a>
@@ -568,23 +573,92 @@
         </section>
     </template>
 
-   <template id="tpl-juegos">
+<template id="tpl-juegos">
     <section class="space-y-6 fade-in bg-zinc-950/40 backdrop-blur-md p-8 rounded-xl border border-zinc-800">
-        <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-4">
-            <h2 class="text-2xl font-medium text-brand flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 text-amber-400">
-                    <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
-                </svg>
-                Novedades de World of Warcraft
-            </h2>
-            <span class="text-xs text-zinc-500 hidden sm:inline">En vivo desde Blizzard</span>
+        
+        <!-- Encabezado de la sección -->
+        <!-- Encabezado de la sección -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-800 pb-4 mb-4 gap-4">
+    
+    <h2 class="text-2xl font-medium text-brand flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 text-red-500">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+        Mis Gameplays
+    </h2>
+
+    <!-- TARJETA DE PANTALLA FINAL (Contador de Suscriptores) -->
+    <a href="https://www.youtube.com/@Camilsoy?sub_confirmation=1" target="_blank" rel="noopener" 
+       class="flex items-center justify-between gap-4 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 hover:border-red-500/50 rounded-xl p-2 pr-4 transition-all duration-300 group shadow-lg">
+        
+        <!-- Botón Rojo con Brillo (Ajustado) -->
+        <div class="flex items-center gap-1.5 bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.6)] group-hover:bg-red-500 group-hover:shadow-[0_0_25px_rgba(220,38,38,0.9)]">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Suscribirse
         </div>
         
-        <!-- Contenedor donde se cargarán las noticias -->
-        <div id="wow-news-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Esqueleto de carga (se oculta al cargar los datos) -->
-            <div class="animate-pulse bg-zinc-900/50 rounded-xl p-5 h-40 border border-zinc-800"></div>
-            <div class="animate-pulse bg-zinc-900/50 rounded-xl p-5 h-40 border border-zinc-800 hidden md:block"></div>
+        <!-- Contador -->
+        <div class="flex flex-col items-start leading-none">
+            <span class="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold mb-1">Suscriptores</span>
+            <!-- Aquí pones el número real de tus suscriptores -->
+            <span class="text-lg font-bold text-white tracking-tight group-hover:text-red-400 transition-colors">31</span>
+        </div>
+
+        <!-- Icono de flecha sutil -->
+        <div class="text-zinc-500 group-hover:text-white transition-colors pl-2 border-l border-zinc-700/50 ml-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 group-hover:translate-x-1 transition-transform">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+        </div>
+    </a>
+</div>
+
+        <!-- Cuadrícula de Videos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Video 1 -->
+            <article class="bg-zinc-900/40 rounded-xl border border-zinc-800 overflow-hidden hover:border-zinc-600 transition-colors group">
+                <!-- Contenedor Responsive del Video (16:9) -->
+                <div class="aspect-video w-full relative">
+                    <iframe 
+                        src="https://www.youtube.com/embed/Jun5rNEQpMA" 
+                        title="Gameplay 1" 
+                        frameborder="0" 
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        class="absolute inset-0 w-full h-full">
+                    </iframe>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-zinc-200 font-bold group-hover:text-brand transition-colors">Sartharion 10N - Guild Colmillo de Escarcha - UltimoWowo</h3>
+                    <p class="text-xs text-zinc-500 mt-1">Desenvolpando Recuerdos</p>
+                </div>
+            </article>
+
+            <!-- Video 2 -->
+            <article class="bg-zinc-900/40 rounded-xl border border-zinc-800 overflow-hidden hover:border-zinc-600 transition-colors group">
+                <div class="aspect-video w-full relative">
+                    <iframe 
+                        src="https://www.youtube.com/embed/WB6HOsJeed8?start=17" 
+                        title="Gameplay 2" 
+                        frameborder="0" 
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        class="absolute inset-0 w-full h-full">
+                    </iframe>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-zinc-200 font-bold group-hover:text-brand transition-colors">Deathbringer Saurfang 10N - Guild Colmillo de Escarcha - UltimoWow</h3>
+                    <p class="text-xs text-zinc-500 mt-1">Desenvolpando Recuerdos</p>
+                </div>
+            </article>
+
+            <!-- Puedes copiar y pegar más bloques <article> si quieres agregar más videos -->
+
         </div>
     </section>
 </template>
