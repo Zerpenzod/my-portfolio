@@ -390,6 +390,9 @@
             <p class="text-zinc-300 max-w-2xl text-lg md:text-xl leading-relaxed">
                 Software Developer
             </p>
+            <p class="text-zinc-300 max-w-2xl text-lg md:text-xl leading-relaxed">
+                Nueva Actualización: 09/11/2026
+            </p>
         </div>
 
         <!-- Últimas publicaciones de LinkedIn -->
@@ -401,10 +404,7 @@
                     </svg>
                     Últimas publicaciones
                 </h2>
-                <a href="https://www.linkedin.com/in/camyl0/" target="_blank" rel="noopener"
-                   class="text-xs text-zinc-500 hover:text-brand transition-colors">
-                    Ver perfil →
-                </a>
+           
             </div>
 
             <!-- Pega aquí los <iframe> de tus publicaciones -->
@@ -415,16 +415,9 @@
                 </div>
                  <div class="rounded-lg overflow-hidden border border-zinc-800">
                     <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7505699933908480001?collapsed=1" height="500" width="100%" frameborder="0" allowfullscreen="" title="Publicación de LinkedIn"></iframe>
-                </div>
-                  <div class="rounded-lg overflow-hidden border border-zinc-800">
-                    <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7521635821280665602?collapsed=1" height="500" width="100%" frameborder="0" allowfullscreen="" title="Publicación de LinkedIn"></iframe>
-                </div>
-                  <div class="rounded-lg overflow-hidden border border-zinc-800">
-                    <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7505699933908480001?collapsed=1" height="500" width="100%" frameborder="0" allowfullscreen="" title="Publicación de LinkedIn"></iframe>
-                </div>
-           
             </div>
         </div>
+        
     </section>
 </template>
 
@@ -507,7 +500,7 @@
                         <div>
                             <div class="flex items-center gap-3 mb-1">
                                 <h3 class="text-zinc-200 group-hover:text-white font-bold transition text-lg">
-                                    Vulnerabilidad Control Académico
+                                    Vulnerabilidad - Control Académico
                                 </h3>
                                 <span class="px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 rounded-md">Completado</span>
                             </div>
@@ -575,28 +568,28 @@
         </section>
     </template>
 
-    <template id="tpl-juegos">
-        <section class="space-y-6 fade-in bg-zinc-950/40 backdrop-blur-md p-8 rounded-xl border border-zinc-800">
-            <h2 class="text-2xl font-medium text-brand">Juegos</h2>
-            <p class="text-zinc-300 leading-relaxed">
-                Aquí recopilo los juegos que he disfrutado y que forman parte de mi día a día.
-                No solo como jugador, sino también como fuente de inspiración para mis proyectos.
-            </p>
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <article class="p-5 rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent hover:border-amber-500/40 transition-colors">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-500/30 to-amber-700/20 border border-amber-500/40 flex items-center justify-center text-amber-300 text-xs font-bold shrink-0">WoW</div>
-                        <div class="min-w-0">
-                            <h3 class="text-lg font-bold text-amber-200">World of Warcraft</h3>
-                            <p class="text-[11px] text-zinc-500 uppercase tracking-wider">Blizzard Entertainment</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-zinc-400 leading-relaxed">Un mundo masivo de fantasía que he explorado por años. Raids, PvP, M+, y sobre todo, la comunidad.</p>
-                </article>
-            </div>
-        </section>
-    </template>
+   <template id="tpl-juegos">
+    <section class="space-y-6 fade-in bg-zinc-950/40 backdrop-blur-md p-8 rounded-xl border border-zinc-800">
+        <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-4">
+            <h2 class="text-2xl font-medium text-brand flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 text-amber-400">
+                    <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                </svg>
+                Novedades de World of Warcraft
+            </h2>
+            <span class="text-xs text-zinc-500 hidden sm:inline">En vivo desde Blizzard</span>
+        </div>
+        
+        <!-- Contenedor donde se cargarán las noticias -->
+        <div id="wow-news-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Esqueleto de carga (se oculta al cargar los datos) -->
+            <div class="animate-pulse bg-zinc-900/50 rounded-xl p-5 h-40 border border-zinc-800"></div>
+            <div class="animate-pulse bg-zinc-900/50 rounded-xl p-5 h-40 border border-zinc-800 hidden md:block"></div>
+        </div>
+    </section>
+</template>
 
     <script src="app.js" defer></script>
+
 </body>
 </html>
