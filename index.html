@@ -300,45 +300,40 @@
         </div>
     </header>
 
-    <!-- MENÚ MÓVIL (ajustado para abrir debajo del header de 113px) -->
-    <div id="mobile-menu" class="fixed left-0 right-0 bottom-0 top-[113px] bg-zinc-950/95 backdrop-blur-xl z-40 transform -translate-y-[120%] opacity-0 pointer-events-none transition-all duration-300 ease-in-out overflow-y-auto lg:hidden border-b border-zinc-800">
-        <div class="p-6 flex flex-col gap-4 text-lg font-medium text-zinc-300">
-            <a href="#inicio" class="hover:text-white transition-colors border-b border-zinc-800 pb-3 mobile-link">Inicio</a>
+       <!-- MENÚ MÓVIL (Estilo idéntico al de PC) -->
+    <div id="mobile-menu" class="fixed left-0 right-0 bottom-0 top-[113px] bg-zinc-950/95 backdrop-blur-xl z-40 transform -translate-y-[120%] opacity-0 pointer-events-none transition-all duration-300 ease-in-out overflow-y-auto lg:hidden border-b border-zinc-800 shadow-2xl">
+        <div class="p-6 flex flex-col gap-1 text-base font-medium text-zinc-400">
+            
+            <a href="#inicio" class="px-4 py-3 rounded-lg hover:bg-zinc-800/50 hover:text-white transition-all mobile-link">Inicio</a>
+            
+            <a href="#sobremi" class="px-4 py-3 rounded-lg hover:bg-zinc-800/50 hover:text-white transition-all mobile-link">Sobre mí</a>
+            
+            <a href="#proyectos" class="px-4 py-3 rounded-lg hover:bg-zinc-800/50 hover:text-white transition-all mobile-link">Proyectos</a>
+            
+            <a href="#contactame" class="px-4 py-3 rounded-lg hover:bg-zinc-800/50 hover:text-white transition-all mobile-link">Contáctame</a>
 
-            <div class="border-b border-zinc-800 pb-3 mobile-accordion">
-                <button class="flex justify-between items-center w-full hover:text-white transition-colors mobile-accordion-btn">
-                    Sobre mí
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                </button>
-                <div class="hidden flex-col gap-3 pl-4 mt-3 text-base text-zinc-400 mobile-accordion-content">
-                    <a href="#sobremi" class="hover:text-white mobile-link">Biografía</a>
-                    <a href="#sobremi" class="hover:text-white mobile-link">Habilidades</a>
+            <!-- Sección de Juegos (Igual al menú de PC) -->
+            <div class="flex flex-col">
+                <a href="#juegos" class="px-4 py-3 rounded-lg hover:bg-zinc-800/50 hover:text-white transition-all mobile-link flex items-center justify-between">
+                    <span>Juegos</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-zinc-500"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </a>
+                
+                <!-- Tarjeta de WoW (Como en el dropdown de PC) -->
+                <div class="mx-4 mt-1 mb-2 p-3 rounded-xl bg-zinc-900/50 border border-zinc-800/80 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-zinc-700/50 shadow-sm">
+                        <img src="img/icon_wow.png" alt="Icono WoW" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-zinc-200">World of Warcraft</p>
+                        <p class="text-[10px] text-zinc-500 truncate">Noticias y Gameplays</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="border-b border-zinc-800 pb-3 mobile-accordion">
-                <button class="flex justify-between items-center w-full hover:text-white transition-colors mobile-accordion-btn">
-                    Proyectos
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                </button>
-                <div class="hidden flex-col gap-3 pl-4 mt-3 text-base text-zinc-400 mobile-accordion-content">
-                    <a href="#proyectos" class="hover:text-white mobile-link">Desarrollo Web</a>
-                    <a href="#proyectos" class="hover:text-white mobile-link">Apps Móviles</a>
-                </div>
-            </div>
-
-            <div class="border-b border-zinc-800 pb-3 mobile-accordion">
-                <button class="flex justify-between items-center w-full hover:text-white transition-colors mobile-accordion-btn">
-                    Contáctame
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                </button>
-                <div class="hidden flex-col gap-3 pl-4 mt-3 text-base text-zinc-400 mobile-accordion-content">
-                    <a href="#contactame" class="hover:text-white mobile-link">Redes Sociales</a>
-                    <a href="#contactame" class="hover:text-white mobile-link">Correo</a>
-                </div>
-            </div>
-
-            <a href="#terminal" class="hover:text-white transition-colors text-brand font-bold pb-3 mobile-link">Terminal</a>
+            <!-- Terminal -->
+            <a href="#terminal" class="px-4 py-3 mt-2 rounded-lg text-brand font-bold hover:bg-brand/10 transition-all mobile-link">Terminal</a>
+            
         </div>
     </div>
 
@@ -642,7 +637,7 @@
             <article class="bg-zinc-900/40 rounded-xl border border-zinc-800 overflow-hidden hover:border-zinc-600 transition-colors group">
                 <div class="aspect-video w-full relative">
                     <iframe 
-                        src="https://www.youtube.com/embed/WB6HOsJeed8?start=17" 
+                        src="https://www.youtube.com/embed/5VuKphYsyIk" 
                         title="Gameplay 2" 
                         frameborder="0" 
                         referrerpolicy="strict-origin-when-cross-origin"
