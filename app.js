@@ -4,36 +4,21 @@
 (function () {
     'use strict';
 
-    // ============================================================
-    // CONFIGURACIÓN Y RUTAS
-    // ============================================================
     const SECTIONS = [
         { id: 'inicio',      label: 'Inicio' },
         { id: 'sobremi',     label: 'Sobre mí' },
         { id: 'proyectos',   label: 'Proyectos' },
         { id: 'juegos',      label: 'Juegos' },
         { id: 'contactame',  label: 'Contáctame' },
+        { id: 'reviews',     label: 'Reviews' }, // NUEVA SECCIÓN
         { id: 'terminal',    label: 'Terminal' },
     ];
     const DEFAULT_SECTION = 'inicio';
 
-    // ============================================================
-    // REFERENCIAS AL DOM
-    // ============================================================
     const els = {
         content:       document.getElementById('content'),
         year:          document.getElementById('year'),
         
-        // Reseñas
-        reviews:       document.getElementById('reviews-list'),
-        sidebar:       document.getElementById('reviews-sidebar'),
-        btnToggle:     document.getElementById('btn-toggle-reviews'),
-        formContainer: document.getElementById('review-form-container'),
-        iconExpand:    document.getElementById('icon-expand'),
-        form:          document.getElementById('review-form'),
-        inputName:     document.getElementById('review-name'),
-        inputText:     document.getElementById('review-text'),
-
         // Configuración y Modo Video
         btnSettings:   document.getElementById('btn-settings'),
         settingsPanel: document.getElementById('settings-panel'),
@@ -51,9 +36,6 @@
         mobileLinks:      document.querySelectorAll('.mobile-link'),
     };
 
-    // ============================================================
-    // UTILIDADES
-    // ============================================================
     function escapeHtml(str) {
         return String(str).replace(/[&<>"']/g, function (c) {
             return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -70,7 +52,7 @@
     function initNavigation() {
         function closeAllPanels() {
             if (els.mobileMenu && !els.mobileMenu.classList.contains('opacity-0')) {
-                els.mobileMenu.classList.add('-translate-y-[120%]', 'opacity-0', 'pointer-events-none');
+                els.mobileMenu.classList.add('-translate-y-4', 'opacity-0', 'pointer-events-none');
                 els.mobileMenu.classList.remove('translate-y-0', 'opacity-100');
             }
             if (els.menuOverlay) {
@@ -84,7 +66,7 @@
             const isOpen = !els.mobileMenu.classList.contains('opacity-0');
             closeAllPanels();
             if (!isOpen) {
-                els.mobileMenu.classList.remove('-translate-y-[120%]', 'opacity-0', 'pointer-events-none');
+                els.mobileMenu.classList.remove('-translate-y-4', 'opacity-0', 'pointer-events-none');
                 els.mobileMenu.classList.add('translate-y-0', 'opacity-100');
                 if (els.menuOverlay) {
                     els.menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
@@ -133,46 +115,87 @@
         });
     }
 
-    // ============================================================
-    // FADE AL ABRIR MENÚS DE PC Y AJUSTES
-    // ============================================================
     function initPcMenuFade() {
         const mainNav = document.getElementById('main-nav');
         if (!mainNav || !els.pcSubmenuOverlay) return;
-
         mainNav.addEventListener('mouseenter', () => els.pcSubmenuOverlay.classList.add('opacity-100'));
         mainNav.addEventListener('mouseleave', () => els.pcSubmenuOverlay.classList.remove('opacity-100'));
     }
 
     // ============================================================
-    // RESEÑAS
+    // RESEÑAS (Ahora se cargan dinámicamente)
     // ============================================================
     async function renderReviews() {
-        if(!els.reviews) return;
-        els.reviews.innerHTML = '<p class="text-xs text-zinc-600 animate-pulse">Cargando reseñas...</p>';
+        const reviewsList = document.getElementById('reviews-list');
+        if(!reviewsList) return;
+        
+        reviewsList.innerHTML = '<p class="text-sm text-zinc-600 animate-pulse">Cargando reseñas...</p>';
         try {
             const res = await fetch('/api/getReviews');
             if (!res.ok) throw new Error('Error al obtener reseñas');
             const reviews = await res.json();
+            
             if (!reviews || reviews.length === 0) {
-                els.reviews.innerHTML = '<p class="text-xs text-zinc-600">No hay reseñas aún. ¡Sé el primero!</p>';
+                reviewsList.innerHTML = '<p class="text-sm text-zinc-600">No hay reseñas aún. ¡Sé el primero!</p>';
                 return;
             }
-            els.reviews.innerHTML = reviews.map(r => `
-                <article class="rounded-lg border border-zinc-800/50 bg-zinc-900/20 p-3 space-y-2 fade-in">
-                    <header class="flex items-center gap-2">
-                        <div class="min-w-0">
-                            <p class="text-sm text-zinc-300 truncate">${escapeHtml(r.user_name)}</p>
-                            <p class="text-[11px] text-zinc-600">${new Date(r.created_at).toLocaleString()}</p>
+            
+            reviewsList.innerHTML = reviews.map(r => `
+                <article class="rounded-xl border border-zinc-800/50 bg-zinc-900/20 p-5 space-y-3 fade-in">
+                    <header class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-400">
+                                ${escapeHtml(r.user_name).charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-zinc-200">${escapeHtml(r.user_name)}</p>
+                                <p class="text-[11px] text-zinc-500">${new Date(r.created_at).toLocaleString()}</p>
+                            </div>
                         </div>
                     </header>
-                    <p class="text-[10px] text-zinc-500 uppercase tracking-wide">Web > Opinión</p>
-                    <p class="text-xs text-zinc-400 leading-relaxed">${escapeHtml(r.comment)}</p>
+                    <p class="text-sm text-zinc-300 leading-relaxed">${escapeHtml(r.comment)}</p>
                 </article>
             `).join('');
         } catch (error) {
-            els.reviews.innerHTML = '<p class="text-xs text-red-500">Error de conexión con la base de datos.</p>';
+            reviewsList.innerHTML = '<p class="text-sm text-red-500">Error de conexión con la base de datos.</p>';
         }
+    }
+
+    function initReviewsPanel() {
+        const form = document.getElementById('review-form');
+        const inputName = document.getElementById('review-name');
+        const inputText = document.getElementById('review-text');
+        
+        if(!form) return;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newReview = { user_name: inputName.value.trim(), comment: inputText.value.trim() };
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/postReview', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newReview)
+                });
+                if (res.ok) {
+                    await renderReviews();
+                    form.reset();
+                } else {
+                    const errorData = await res.json();
+                    alert(`Error: ${errorData.error || 'No se pudo guardar la reseña'}`);
+                }
+            } catch (error) {
+                alert("No se pudo conectar con el servidor.");
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
     }
 
     // ============================================================
@@ -185,7 +208,14 @@
             return;
         }
         els.content.replaceChildren(tpl.content.cloneNode(true));
-        if (id === 'terminal') initTerminal();
+        
+        // Inicializadores específicos por sección
+        if (id === 'terminal') {
+            initTerminal();
+        } else if (id === 'reviews') {
+            renderReviews();
+            initReviewsPanel();
+        }
     }
 
     // ============================================================
@@ -227,9 +257,9 @@
                 let output = '';
                 switch (cmd) {
                     case 'ayuda': case 'help':
-                        output = `Comandos: <span class="term-prompt">inicio</span>, <span class="term-prompt">sobremi</span>, <span class="term-prompt">proyectos</span>, <span class="term-prompt">juegos</span>, <span class="term-prompt">contactame</span>, <span class="term-prompt">clear</span>`;
+                        output = `Comandos: <span class="term-prompt">inicio</span>, <span class="term-prompt">sobremi</span>, <span class="term-prompt">proyectos</span>, <span class="term-prompt">juegos</span>, <span class="term-prompt">contactame</span>, <span class="term-prompt">reviews</span>, <span class="term-prompt">clear</span>`;
                         break;
-                    case 'inicio': case 'sobremi': case 'proyectos': case 'juegos': case 'contactame':
+                    case 'inicio': case 'sobremi': case 'proyectos': case 'juegos': case 'contactame': case 'reviews':
                         window.location.hash = cmd;
                         return;
                     case 'clear':
@@ -240,56 +270,6 @@
                 }
                 if (output) history.innerHTML += `<div class="mb-2">${output}</div>`;
                 terminalWindow.scrollTop = terminalWindow.scrollHeight;
-            }
-        });
-    }
-
-    // ============================================================
-    // PANEL DE RESEÑAS (formulario)
-    // ============================================================
-    function initReviewsPanel() {
-        if(!els.btnToggle) return;
-        let isExpanded = false;
-        els.btnToggle.addEventListener('click', () => {
-            isExpanded = !isExpanded;
-            if (isExpanded) {
-                if (window.innerWidth >= 1024) els.sidebar.classList.replace('lg:w-[320px]', 'lg:w-[450px]');
-                els.formContainer.classList.remove('hidden');
-                els.formContainer.classList.add('fade-in');
-                els.iconExpand.classList.add('rotate-90', 'text-brand');
-            } else {
-                els.sidebar.classList.replace('lg:w-[450px]', 'lg:w-[320px]');
-                els.formContainer.classList.add('hidden');
-                els.iconExpand.classList.remove('rotate-90', 'text-brand');
-            }
-        });
-
-        els.form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const newReview = { user_name: els.inputName.value.trim(), comment: els.inputText.value.trim() };
-            const submitBtn = els.form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Enviando...';
-            submitBtn.disabled = true;
-
-            try {
-                const res = await fetch('/api/postReview', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newReview)
-                });
-                if (res.ok) {
-                    await renderReviews();
-                    els.form.reset();
-                } else {
-                    const errorData = await res.json();
-                    alert(`Error: ${errorData.error || 'No se pudo guardar la reseña'}`);
-                }
-            } catch (error) {
-                alert("No se pudo conectar con el servidor.");
-            } finally {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
             }
         });
     }
@@ -322,7 +302,6 @@
             els.pcSubmenuOverlay.addEventListener('click', () => toggleSettingsPanel(true));
         }
 
-        // Música
         const musicState = localStorage.getItem('portfolio_music') || 'off';
         if (musicState === 'on' && els.bgAudio) els.bgAudio.play().then(() => updateMusicBtn(true)).catch(() => updateMusicBtn(false));
 
@@ -347,7 +326,6 @@
             musicBtn.className = isPlaying ? 'px-3 py-1 rounded-md text-xs font-medium bg-brand text-zinc-950 transition' : 'px-3 py-1 rounded-md text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition';
         }
 
-        // Temas
         const savedTheme = localStorage.getItem('portfolio_theme') || 'theme-green';
         document.body.className = document.body.className.replace(/theme-\w+/g, '');
         document.body.classList.add(savedTheme);
@@ -361,7 +339,6 @@
             });
         });
 
-        // Modo Video y Alerta de Rotación
         function checkOrientation() {
             if (!els.rotateAlert) return;
             const isMobile = window.innerWidth < 1024;
@@ -408,9 +385,6 @@
         window.addEventListener('orientationchange', checkOrientation);
     }
 
-    // ============================================================
-    // VIDEO DE FONDO (AUTO-PLAY INFALIBLE)
-    // ============================================================
     function initVideo() {
         const video = document.getElementById('bg-video');
         if (!video) return;
@@ -438,9 +412,6 @@
         }
     }
 
-    // ============================================================
-    // ROUTER (hash)
-    // ============================================================
     function getCurrentHash() {
         const raw = window.location.hash.replace('#', '').trim();
         return isKnownSection(raw) ? raw : DEFAULT_SECTION;
@@ -450,20 +421,16 @@
         renderSection(getCurrentHash());
     }
 
-    // ============================================================
-    // INIT
-    // ============================================================
     function init() {
         initVideo();
         initNavigation(); 
         initPcMenuFade();
-        renderReviews(); 
         initSettings();
-        initReviewsPanel();
         
         if (!isKnownSection(window.location.hash.replace('#', ''))) {
             history.replaceState(null, '', '#' + DEFAULT_SECTION);
         }
+        
         renderSection(getCurrentHash());
         window.addEventListener('hashchange', handleRouteChange);
         
